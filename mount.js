@@ -2,26 +2,35 @@
 
   var CDNInjectorElement = window.CDNInjectorElement = document.createElement('div');
 
-  CDNInjectorElement.style.display = 'block';
+  CDNInjectorElement.className = 'cdn-injector-container';
+
+  var CDNStylesElement = document.createElement('style');
 
   CDNInjectorElement.innerHTML = '\
-                   <p class="cdn-prompt">Enter libraries below in format \
-                   &lt;name&gt;[@&lt;version&gt;], &lt;name&gt; ...</p>\
-                   <p id="cdn-error" class="cdn-error"></p>\
-                   <textarea style="display: block;" id="cdn-input" class="cdn-input"></textarea>\
-                   <button id="cdn-submit">Fetch libraries</button>\
-                   ';
+    <p class="cdn-injector-prompt">Enter libraries below in format \
+    &lt;name&gt;[@&lt;version&gt;], &lt;name&gt; ...</p>\
+    <p id="cdn-injector-error" class="cdn-injector-error"></p>\
+    <textarea style="display: block;" id="cdn-injector-input" class="cdn-injector-input"></textarea>\
+    <button id="cdn-injector-submit">Fetch libraries</button>\
+    ';
+
+  CDNStylesElement.innerHTML = '\
+    .cdn-injector-container {display: block; margin-left: auto; margin-right: auto;\
+                    color: white; background-color: #AAA; border-radius: 5px;\
+                    max-width: 300px; padding: 10px; text-align: center;}\
+    .cdn-injector-input {margin: 10px auto 10px auto;}\
+    ';
 
   CDNInjectorElement.showError = function(errMsg) {
     var text = document.createTextNode(errMsg);
-    var errorElt = CDNInjectorElement.querySelector('#cdn-error');
+    var errorElt = CDNInjectorElement.querySelector('#cdn-injector-error');
     errorElt.innerHTML = '';
     errorElt.appendChild(text);
   };
 
   CDNInjectorElement.handleSubmit = function(callback) {
-    var input = CDNInjectorElement.querySelector('#cdn-input');
-    var button = CDNInjectorElement.querySelector('#cdn-submit');
+    var input = CDNInjectorElement.querySelector('#cdn-injector-input');
+    var button = CDNInjectorElement.querySelector('#cdn-injector-submit');
 
     button.addEventListener('click', function(event) {
       if (input.value === '') return;
@@ -34,6 +43,7 @@
   };
 
   CDNInjectorElement.mount = function(element) {
+    document.head.appendChild(CDNStylesElement);
     if (element.hasChildNodes()) {
       element.insertBefore(CDNInjectorElement, element.firstChild)
     } else {
@@ -43,6 +53,7 @@
 
   CDNInjectorElement.unmount = function() {
     CDNInjectorElement.remove();
+    CDNStylesElement.remove();
   };
 
 })();
