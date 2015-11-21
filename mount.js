@@ -2,9 +2,13 @@
 
   var CDNInjectorElement = window.CDNInjectorElement = document.createElement('div');
 
-  CDNInjectorElement.innerHTML = '<span class="cdn-prompt">Enter libraries below in format <name>[@<version>], <name> ...</span>\
-                   <span id="cdn-error" class="cdn-error"></span>\
-                   <textarea id="cdn-input" class="cdn-input"></textarea>\
+  CDNInjectorElement.style.display = 'block';
+
+  CDNInjectorElement.innerHTML = '\
+                   <p class="cdn-prompt">Enter libraries below in format \
+                   &lt;name&gt;[@&lt;version&gt;], &lt;name&gt; ...</p>\
+                   <p id="cdn-error" class="cdn-error"></p>\
+                   <textarea style="display: block;" id="cdn-input" class="cdn-input"></textarea>\
                    <button id="cdn-submit">Fetch libraries</button>\
                    ';
 
