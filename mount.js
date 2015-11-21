@@ -10,7 +10,7 @@
     <p class="cdn-injector-prompt">Enter libraries below in format \
     &lt;name&gt;[@&lt;version&gt;], &lt;name&gt; ...</p>\
     <p id="cdn-injector-error" class="cdn-injector-error"></p>\
-    <textarea style="display: block;" id="cdn-injector-input" class="cdn-injector-input"></textarea>\
+    <textarea id="cdn-injector-input" class="cdn-injector-input"></textarea>\
     <button id="cdn-injector-submit">Fetch libraries</button>\
     ';
 
@@ -18,7 +18,7 @@
     .cdn-injector-container {display: block; margin-left: auto; margin-right: auto;\
                     color: white; background-color: #AAA; border-radius: 5px;\
                     max-width: 300px; padding: 10px; text-align: center;}\
-    .cdn-injector-input {margin: 10px auto 10px auto;}\
+    .cdn-injector-input {display: block; margin: 10px auto 10px auto;}\
     ';
 
   CDNInjectorElement.showError = function(errMsg) {
