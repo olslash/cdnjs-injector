@@ -13,9 +13,10 @@ CDNInjectorElement.innerHTML =
   '<button id="cdn-injector-submit">Fetch libraries</button>';
 
 CDNStylesElement.innerHTML =
-  '.cdn-injector-container {display: block; margin-left: auto; margin-right: auto;' +
+  '.cdn-injector-container {display: fixed; margin-left: auto; margin-right: auto;' +
                   'color: white; background-color: #AAA; border-radius: 5px;' +
-                  'max-width: 300px; padding: 10px; text-align: center;}' +
+                  'max-width: 300px; padding: 10px; text-align: center;' +
+                  'position:fixed; left:0; right: 0}' +
   '.cdn-injector-input {display: block; margin: 10px auto 10px auto;}';
 
 module.exports = {
