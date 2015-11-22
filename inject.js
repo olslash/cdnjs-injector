@@ -1,7 +1,8 @@
 // todo: show what libs will be loaded + confirm button. In case first search result isn't the right thing.
 
 (function() {
-  var CDN_URL = 'https://api.cdnjs.com/libraries';
+  var CDN_API_URL = 'https://api.cdnjs.com/libraries';
+  var CDN_SCRIPT_BASEURL = 'https://cdnjs.cloudflare.com/ajax/libs/';
 
   function main(userInput) {
     var requestedLibraries = parseUserInput(userInput);
@@ -23,7 +24,7 @@
     });
 
     asyncMap(queries, function(query, done) {
-      get(CDN_URL, query, function(err, res) {
+      get(CDN_API_URL, query, function(err, res) {
         var results = res.results;
 
         if (err) {
@@ -42,7 +43,7 @@
             return done('The version specified for ' + query.name + ' (' + query.version + ') does not exist.');
           }
 
-          libraryScriptURL = getVersionedURL(results[0].latest, query.version);
+          libraryScriptURL = getVersionedCDNURL(results[0].name, query.version, extractFilename(results[0].latest));
         } else {
           libraryScriptURL = results[0].latest;
         }
@@ -79,14 +80,6 @@
       });
   }
 
-  function getVersionedURL(anyVersionURL, version) {
-    // second-from-last index of anyVersionURL.split('/') should be the version. splice it in.
-  }
-
-  function injectScripts(scriptURLs) {
-    
-  }
-
   function get(url, data, cb) {
     var request = new XMLHttpRequest();
     request.open('GET', url + '?' + encodeQueryData(data), true);
@@ -110,6 +103,15 @@
     return Object.keys(data).map(function(key) {
       return encodeURIComponent(key) + "=" + encodeURIComponent(data[key]);
     }).join('&');
+  }
+
+  function getVersionedCDNURL(libName, version, fileName) {
+    return CDN_SCRIPT_BASEURL + libName + '/' + version + '/' + fileName;
+  }
+
+  function extractFilename(url) {
+    var segments = url.split('/');
+    return segments[segments.length - 1];
   }
 
   // modified async-each MIT license (by Paul Miller from http://paulmillr.com).
