@@ -6,7 +6,7 @@ CDNInjectorElement.className = 'cdn-injector-container';
 var CDNStylesElement = document.createElement('style');
 
 CDNInjectorElement.innerHTML =
-  '<p class="cdn-injector-prompt">Enter libraries below in format' +
+  '<p class="cdn-injector-prompt">Enter libraries below in the format<br>' +
   '&lt;name&gt;[@&lt;version&gt;], &lt;name&gt; ...</p>' +
   '<p id="cdn-injector-error" class="cdn-injector-error"></p>' +
   '<textarea id="cdn-injector-input" class="cdn-injector-input"></textarea>' +
