@@ -17,7 +17,10 @@ CDNInjectorElement.innerHTML =
 
 CDNStylesElement.innerHTML =
   '.cdn-injector-container {' +
-                  'display: fixed; ' +
+                  'display: block;' +
+                  'position: fixed;' +
+                  'left: 0;' +
+                  'right: 0;' +
                   'margin-left: auto;' +
                   'margin-right: auto;' +
                   'color: white;' +
@@ -26,9 +29,7 @@ CDNStylesElement.innerHTML =
                   'max-width: 300px;' +
                   'padding: 10px;' +
                   'text-align: center;' +
-                  'position:fixed;' +
-                  'left:0;' +
-                  'right: 0' +
+                  'z-index: 9999;' +
                 '}' +
   '.cdn-injector-input {' +
                   'display: block;' +
@@ -57,12 +58,8 @@ module.exports = {
     var input = CDNInjectorElement.querySelector('#cdn-injector-input');
     var button = CDNInjectorElement.querySelector('#cdn-injector-submit');
 
-    button.addEventListener('click', function(event) {
-      if (input.value === '') return;
-
+    button.addEventListener('mouseup', function(event) {
       callback(input.value);
-      // Will destroy input value even if submission fails.
-      // Possible improvement would use success/failure handlers.
       input.value = '';
     });
   },

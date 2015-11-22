@@ -10,11 +10,11 @@ var inject = require('./inject');
   ui.mount(document.body);
 
   ui.attachSubmitListener(function(userInput) {
-    var requestedLibraries = parse.parseUserInput(userInput);
-
-    if (!requestedLibraries.length) {
+    if (!userInput.length) {
       return ui.showError('Please enter some library names');
     }
+
+    var requestedLibraries = parse.parseUserInput(userInput);
 
     api.getCDNLibraryURLs(requestedLibraries, function(err, URLs) {
       if (err) {
