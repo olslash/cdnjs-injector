@@ -8,7 +8,7 @@ function getCDNLibraryURLs(libs, cb) {
     return {
       search: option.name,
       fields: option.version ? 'assets' : null,
-      version: option.version
+      version: option.version // attaches useless version param but convenient later
     };
   });
 
@@ -21,7 +21,7 @@ function getCDNLibraryURLs(libs, cb) {
       var results = JSON.parse(res.responseText).results;
 
       if (results.length === 0) {
-        return done('No results found for ' + query.name);
+        return done('No results found for ' + query.search);
       }
 
       var libraryScriptURL;
