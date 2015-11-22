@@ -1,4 +1,12 @@
-(function(api, ui, parse, inject) {
+// (function(api, ui, parse, inject) {
+
+var api = require('./api');
+var ui = require('./ui');
+var parse = require('./parse');
+var inject = require('./inject');
+
+
+(function main() {
   ui.mount(document.body);
 
   ui.attachSubmitListener(function(userInput) {

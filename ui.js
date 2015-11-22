@@ -1,65 +1,61 @@
 // todo: close button
+var CDNInjectorElement = document.createElement('div');
 
-(function() {
+CDNInjectorElement.className = 'cdn-injector-container';
 
-  var CDNInjectorElement = document.createElement('div');
+var CDNStylesElement = document.createElement('style');
 
-  CDNInjectorElement.className = 'cdn-injector-container';
+CDNInjectorElement.innerHTML =
+  '<p class="cdn-injector-prompt">Enter libraries below in format' +
+  '&lt;name&gt;[@&lt;version&gt;], &lt;name&gt; ...</p>' +
+  '<p id="cdn-injector-error" class="cdn-injector-error"></p>' +
+  '<textarea id="cdn-injector-input" class="cdn-injector-input"></textarea>' +
+  '<button id="cdn-injector-submit">Fetch libraries</button>';
 
-  var CDNStylesElement = document.createElement('style');
+CDNStylesElement.innerHTML =
+  '.cdn-injector-container {display: block; margin-left: auto; margin-right: auto;' +
+                  'color: white; background-color: #AAA; border-radius: 5px;' +
+                  'max-width: 300px; padding: 10px; text-align: center;}' +
+  '.cdn-injector-input {display: block; margin: 10px auto 10px auto;}';
 
-  CDNInjectorElement.innerHTML =
-    '<p class="cdn-injector-prompt">Enter libraries below in format' +
-    '&lt;name&gt;[@&lt;version&gt;], &lt;name&gt; ...</p>' +
-    '<p id="cdn-injector-error" class="cdn-injector-error"></p>' +
-    '<textarea id="cdn-injector-input" class="cdn-injector-input"></textarea>' +
-    '<button id="cdn-injector-submit">Fetch libraries</button>';
+module.exports = {
+  showError: function(errMsg) {
+    var text = document.createTextNode(errMsg);
+    var errorElt = CDNInjectorElement.querySelector('#cdn-injector-error');
+    errorElt.innerHTML = '';
+    errorElt.appendChild(text);
+  },
 
-  CDNStylesElement.innerHTML =
-    '.cdn-injector-container {display: block; margin-left: auto; margin-right: auto;' +
-                    'color: white; background-color: #AAA; border-radius: 5px;' +
-                    'max-width: 300px; padding: 10px; text-align: center;}' +
-    '.cdn-injector-input {display: block; margin: 10px auto 10px auto;}';
+  hideError: function() {
+    var errorElt = CDNInjectorElement.querySelector('#cdn-injector-error');
+    errorElt.remove();
+  },
 
-  return {
-    showError: function(errMsg) {
-      var text = document.createTextNode(errMsg);
-      var errorElt = CDNInjectorElement.querySelector('#cdn-injector-error');
-      errorElt.innerHTML = '';
-      errorElt.appendChild(text);
-    },
+  attachSubmitListener: function(callback) {
+    var input = CDNInjectorElement.querySelector('#cdn-injector-input');
+    var button = CDNInjectorElement.querySelector('#cdn-injector-submit');
 
-    hideError: function() {
-      var errorElt = CDNInjectorElement.querySelector('#cdn-injector-error');
-      errorElt.remove();
-    },
+    button.addEventListener('click', function(event) {
+      if (input.value === '') return;
 
-    attachSubmitListener: function(callback) {
-      var input = CDNInjectorElement.querySelector('#cdn-injector-input');
-      var button = CDNInjectorElement.querySelector('#cdn-injector-submit');
+      callback(input.value);
+      // Will destroy input value even if submission fails.
+      // Possible improvement would use success/failure handlers.
+      input.value = '';
+    });
+  },
 
-      button.addEventListener('click', function(event) {
-        if (input.value === '') return;
-
-        callback(input.value);
-        // Will destroy input value even if submission fails.
-        // Possible improvement would use success/failure handlers.
-        input.value = '';
-      });
-    },
-
-    mount: function(element) {
-      document.head.appendChild(CDNStylesElement);
-      if (element.hasChildNodes()) {
-        element.insertBefore(CDNInjectorElement, element.firstChild);
-      } else {
-        element.appendChild(CDNInjectorElement);
-      }
-    },
-
-    unmount: function() {
-      CDNInjectorElement.remove();
-      CDNStylesElement.remove();
+  mount: function(element) {
+    document.head.appendChild(CDNStylesElement);
+    if (element.hasChildNodes()) {
+      element.insertBefore(CDNInjectorElement, element.firstChild);
+    } else {
+      element.appendChild(CDNInjectorElement);
     }
-  };
-})();
+  },
+
+  unmount: function() {
+    CDNInjectorElement.remove();
+    CDNStylesElement.remove();
+  }
+};
