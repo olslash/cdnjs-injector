@@ -1,10 +1,10 @@
-var CDNInjectorElement = document.createElement('div');
+var CDNInjectorElement = document.createElement('iframe');
 
 CDNInjectorElement.className = 'cdn-injector-container';
 
 var CDNStylesElement = document.createElement('style');
 
-CDNInjectorElement.innerHTML =
+CDNInjectorElement.srcdoc =
   '<div id="cdn-injector-close">x</div>' +
   '<p class="cdn-injector-prompt">' +
     'Enter libraries below in the format<br>' +
@@ -54,12 +54,15 @@ module.exports = {
   },
 
   attachSubmitListener: function(callback) {
-    var input = CDNInjectorElement.querySelector('#cdn-injector-input');
-    var button = CDNInjectorElement.querySelector('#cdn-injector-submit');
+    CDNInjectorElement.addEventListener('load', function() {
+      // fixme? will this work more than once?
+      var input = CDNInjectorElement.contentDocument.querySelector('#cdn-injector-input');
+      var button = CDNInjectorElement.contentDocument.querySelector('#cdn-injector-submit');
 
-    button.addEventListener('mouseup', function(event) {
-      callback(input.value);
-      input.value = '';
+      button.addEventListener('mouseup', function(event) {
+        callback(input.value);
+        input.value = '';
+      });
     });
   },
 
@@ -71,8 +74,10 @@ module.exports = {
       element.appendChild(CDNInjectorElement);
     }
 
-    var input = CDNInjectorElement.querySelector('#cdn-injector-close');
-    input.addEventListener('click', module.exports.unmount);
+    CDNInjectorElement.addEventListener('load', function() {
+      var closeButton = CDNInjectorElement.contentDocument.querySelector('#cdn-injector-close');
+      closeButton.addEventListener('click', module.exports.unmount);
+    });
   },
 
   unmount: function() {
