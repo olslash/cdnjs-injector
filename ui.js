@@ -8,20 +8,18 @@
 
   var CDNStylesElement = document.createElement('style');
 
-  CDNInjectorElement.innerHTML = '\
-    <p class="cdn-injector-prompt">Enter libraries below in format \
-    &lt;name&gt;[@&lt;version&gt;], &lt;name&gt; ...</p>\
-    <p id="cdn-injector-error" class="cdn-injector-error"></p>\
-    <textarea id="cdn-injector-input" class="cdn-injector-input"></textarea>\
-    <button id="cdn-injector-submit">Fetch libraries</button>\
-    ';
+  CDNInjectorElement.innerHTML =
+    '<p class="cdn-injector-prompt">Enter libraries below in format' +
+    '&lt;name&gt;[@&lt;version&gt;], &lt;name&gt; ...</p>' +
+    '<p id="cdn-injector-error" class="cdn-injector-error"></p>' +
+    '<textarea id="cdn-injector-input" class="cdn-injector-input"></textarea>' +
+    '<button id="cdn-injector-submit">Fetch libraries</button>';
 
-  CDNStylesElement.innerHTML = '\
-    .cdn-injector-container {display: block; margin-left: auto; margin-right: auto;\
-                    color: white; background-color: #AAA; border-radius: 5px;\
-                    max-width: 300px; padding: 10px; text-align: center;}\
-    .cdn-injector-input {display: block; margin: 10px auto 10px auto;}\
-    ';
+  CDNStylesElement.innerHTML =
+    '.cdn-injector-container {display: block; margin-left: auto; margin-right: auto;' +
+                    'color: white; background-color: #AAA; border-radius: 5px;' +
+                    'max-width: 300px; padding: 10px; text-align: center;}' +
+    '.cdn-injector-input {display: block; margin: 10px auto 10px auto;}';
 
   return {
     showError: function(errMsg) {
