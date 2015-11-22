@@ -1,45 +1,55 @@
+// todo: show what libs will be loaded + confirm button. In case first search result isn't the right thing.
+
 (function() {
   var CDN_URL = 'https://api.cdnjs.com/libraries';
 
-  function searchCDN(libs, cb) {
-    // if search includes a version for a particular library, that library's call should
-    // include &fields=assets, then search results[0].assets for version: x.x.x
-    // otherwise take results[0].latest
-    var results = [];
-    libs.forEach(function(option) {
-      var query = {
+  function main(userInput) {
+    var requestedLibraries = parseUserInput(userInput);
+    getCDNLibraryURLs(requestedLibraries, function(err, URLs) {
+      if (err) {
+        // showError(err)
+      }
+
+      injectScripts(URLs);
+    });
+  }
+
+  function getCDNLibraryURLs(libs, cb) {
+    var queries = libs.map(function(option) {
+      return {
         search: option.name,
         fields: option.version ? 'assets' : null
       };
+    });
 
+    asyncMap(queries, function(query, done) {
       get(CDN_URL, query, function(err, res) {
         var results = res.results;
-        if (err || results.length === 0) {
-          // handle failure
+
+        if (err) {
+          return done('API error: ' + err);
+        } else if (results.length === 0) {
+          return done('No results found for ' + query.name);
         }
 
         var libraryScriptURL;
-        if (option.version) {
-          var lib = findWhere(results[0].assets, function (asset) {
-            return asset.version === option.version;
+        if (query.version) {
+          var versionExists = results[0].assets.some(function(asset) {
+            return asset.version === query.version;
           });
+
+          if (!versionExists) {
+            return done('The version specified for ' + query.name + ' (' + query.version + ') does not exist.');
+          }
+
+          libraryScriptURL = getVersionedURL(results[0].latest, query.version);
         } else {
-          libraryScriptURL = results[0].latest
+          libraryScriptURL = results[0].latest;
         }
 
-        results.push('etc');
-
-        if (results.length === libs.length) {
-          cb(null, results);
-        }
+        done(null, libraryScriptURL);
       });
-    });
-
-
-  }
-
-  function parseApiResponse(res) {
-
+    }, cb);
   }
 
   function parseUserInput(input) {
@@ -73,6 +83,10 @@
     // second-from-last index of anyVersionURL.split('/') should be the version. splice it in.
   }
 
+  function injectScripts(scriptURLs) {
+    
+  }
+
   function get(url, data, cb) {
     var request = new XMLHttpRequest();
     request.open('GET', url + '?' + encodeQueryData(data), true);
@@ -98,14 +112,31 @@
     }).join('&');
   }
 
-  function findWhere(array, pred) {
-    for(var i = 0, len = array.length; i < len; i++) {
-      var val = array[i];
-      if (pred(val)) {
-        return val;
-      }
-    }
+  // modified async-each MIT license (by Paul Miller from http://paulmillr.com).
+  function asyncMap(items, iterator, callback) {
+    if (items.length === 0) return callback(undefined, items);
 
-    return null;
+    var transformed = new Array(items.length);
+    var count = 0;
+    var returned = false;
+
+    items.forEach(function(item, index) {
+      iterator(item, function(error, transformedItem) {
+        if (returned) {
+          return null;
+        }
+
+        if (error) {
+          returned = true;
+          return callback(error);
+        }
+
+        transformed[index] = transformedItem;
+        count += 1;
+        if (count === items.length) {
+          return callback(undefined, transformed);
+        }
+      });
+    });
   }
 })();
