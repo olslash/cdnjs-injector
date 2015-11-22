@@ -6,7 +6,7 @@ CDNInjectorElement.className = 'cdn-injector-container';
 var CDNStylesElement = document.createElement('style');
 
 CDNInjectorElement.innerHTML =
-  '<div class=cdn-injector-close>' +
+  '<div id="cdn-injector-close">x</div>' +
   '<p class="cdn-injector-prompt">' +
     'Enter libraries below in the format<br>' +
     '&lt;name&gt;[@&lt;version&gt;], &lt;name&gt; ...' +
@@ -33,6 +33,11 @@ CDNStylesElement.innerHTML =
   '.cdn-injector-input {' +
                   'display: block;' +
                   'margin: 10px auto 10px auto;' +
+                '}' +
+  '#cdn-injector-close {' +
+                  'cursor: pointer;' +
+                  'position: absolute;' +
+                  'right: 20px;' +
                 '}';
 
 module.exports = {
@@ -69,6 +74,9 @@ module.exports = {
     } else {
       element.appendChild(CDNInjectorElement);
     }
+
+    var input = CDNInjectorElement.querySelector('#cdn-injector-close');
+    input.addEventListener('click', module.exports.unmount);
   },
 
   unmount: function() {
