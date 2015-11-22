@@ -9,17 +9,21 @@ var inject = require('./inject');
 
   ui.attachSubmitListener(function(userInput) {
     if (!userInput.length) {
-      return ui.showError('Please enter some library names');
+      return ui.showMessage('Please enter some library names');
     }
 
     var requestedLibraries = parse.parseUserInput(userInput);
 
     api.getCDNLibraryURLs(requestedLibraries, function(err, URLs) {
       if (err) {
-        return ui.showError(err);
+        return ui.showMessage(err);
       }
 
       inject.injectScripts(URLs);
+
+      setTimeout(function() {
+        ui.unmount();
+      }, 1000);
     });
   });
 })();

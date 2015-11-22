@@ -10,7 +10,7 @@ CDNInjectorElement.srcdoc =
     'Enter libraries below in the format<br>' +
     '&lt;name&gt;[@&lt;version&gt;], &lt;name&gt; ...' +
   '</p>' +
-  '<p id="cdn-injector-error" class="cdn-injector-error"></p>' +
+  '<p id="cdn-injector-message" class="cdn-injector-message"></p>' +
   '<textarea id="cdn-injector-input" class="cdn-injector-input"></textarea>' +
   '<button id="cdn-injector-submit">Fetch libraries</button>';
 
@@ -29,7 +29,11 @@ CDNStylesElement.innerHTML =
                   'padding: 10px;' +
                   'text-align: center;' +
                   'z-index: 9999;' +
-                '}' +
+                '}';
+
+CDNInjectorElement.addEventListener('load', function() {
+  var CDNINjectorIframeStyles = CDNInjectorElement.contentDocument.createElement('style');
+  CDNINjectorIframeStyles.innerHTML =
   '.cdn-injector-input {' +
                   'display: block;' +
                   'margin: 10px auto 10px auto;' +
@@ -40,16 +44,21 @@ CDNStylesElement.innerHTML =
                   'right: 20px;' +
                 '}';
 
+  CDNInjectorElement.contentDocument.head.appendChild(CDNINjectorIframeStyles);
+});
+
+
+
 module.exports = {
-  showError: function(errMsg) {
+  showMessage: function(errMsg) {
     var text = document.createTextNode(errMsg);
-    var errorElt = CDNInjectorElement.querySelector('#cdn-injector-error');
+    var errorElt = CDNInjectorElement.querySelector('#cdn-injector-message');
     errorElt.innerHTML = '';
     errorElt.appendChild(text);
   },
 
   hideError: function() {
-    var errorElt = CDNInjectorElement.querySelector('#cdn-injector-error');
+    var errorElt = CDNInjectorElement.querySelector('#cdn-injector-message');
     errorElt.remove();
   },
 
