@@ -13,11 +13,13 @@ function getCDNLibraryURLs(libs, cb) {
 
   asyncMap(queries, function(query, done) {
     get(CDN_API_URL, query, function(err, res) {
-      var results = res.results;
-
       if (err) {
         return done('API error: ' + err);
-      } else if (results.length === 0) {
+      }
+
+      var results = JSON.parse(res.responseText).results;
+
+      if (results.length === 0) {
         return done('No results found for ' + query.name);
       }
 
