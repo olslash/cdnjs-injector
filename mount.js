@@ -45,7 +45,7 @@
   CDNInjectorElement.mount = function(element) {
     document.head.appendChild(CDNStylesElement);
     if (element.hasChildNodes()) {
-      element.insertBefore(CDNInjectorElement, element.firstChild)
+      element.insertBefore(CDNInjectorElement, element.firstChild);
     } else {
       element.appendChild(CDNInjectorElement);
     }
