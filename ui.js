@@ -1,6 +1,8 @@
+// todo: close button
+
 (function() {
 
-  var CDNInjectorElement = window.CDNInjectorElement = document.createElement('div');
+  var CDNInjectorElement = document.createElement('div');
 
   CDNInjectorElement.className = 'cdn-injector-container';
 
@@ -21,39 +23,45 @@
     .cdn-injector-input {display: block; margin: 10px auto 10px auto;}\
     ';
 
-  CDNInjectorElement.showError = function(errMsg) {
-    var text = document.createTextNode(errMsg);
-    var errorElt = CDNInjectorElement.querySelector('#cdn-injector-error');
-    errorElt.innerHTML = '';
-    errorElt.appendChild(text);
-  };
+  return {
+    showError: function(errMsg) {
+      var text = document.createTextNode(errMsg);
+      var errorElt = CDNInjectorElement.querySelector('#cdn-injector-error');
+      errorElt.innerHTML = '';
+      errorElt.appendChild(text);
+    },
 
-  CDNInjectorElement.handleSubmit = function(callback) {
-    var input = CDNInjectorElement.querySelector('#cdn-injector-input');
-    var button = CDNInjectorElement.querySelector('#cdn-injector-submit');
+    hideError: function() {
+      var errorElt = CDNInjectorElement.querySelector('#cdn-injector-error');
+      errorElt.remove();
+    },
 
-    button.addEventListener('click', function(event) {
-      if (input.value === '') return;
+    attachSubmitListener: function(callback) {
+      var input = CDNInjectorElement.querySelector('#cdn-injector-input');
+      var button = CDNInjectorElement.querySelector('#cdn-injector-submit');
 
-      callback(input.value);
-      // Will destroy input value even if submission fails.
-      // Possible improvement would use success/failure handlers.
-      input.value = '';
-    });
-  };
+      button.addEventListener('click', function(event) {
+        if (input.value === '') return;
 
-  CDNInjectorElement.mount = function(element) {
-    document.head.appendChild(CDNStylesElement);
-    if (element.hasChildNodes()) {
-      element.insertBefore(CDNInjectorElement, element.firstChild);
-    } else {
-      element.appendChild(CDNInjectorElement);
+        callback(input.value);
+        // Will destroy input value even if submission fails.
+        // Possible improvement would use success/failure handlers.
+        input.value = '';
+      });
+    },
+
+    mount: function(element) {
+      document.head.appendChild(CDNStylesElement);
+      if (element.hasChildNodes()) {
+        element.insertBefore(CDNInjectorElement, element.firstChild);
+      } else {
+        element.appendChild(CDNInjectorElement);
+      }
+    },
+
+    unmount: function() {
+      CDNInjectorElement.remove();
+      CDNStylesElement.remove();
     }
   };
-
-  CDNInjectorElement.unmount = function() {
-    CDNInjectorElement.remove();
-    CDNStylesElement.remove();
-  };
-
 })();

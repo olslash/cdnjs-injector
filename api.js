@@ -4,17 +4,6 @@
   var CDN_API_URL = 'https://api.cdnjs.com/libraries';
   var CDN_SCRIPT_BASEURL = 'https://cdnjs.cloudflare.com/ajax/libs/';
 
-  function main(userInput) {
-    var requestedLibraries = parseUserInput(userInput);
-    getCDNLibraryURLs(requestedLibraries, function(err, URLs) {
-      if (err) {
-        // showError(err)
-      }
-
-      injectScripts(URLs);
-    });
-  }
-
   function getCDNLibraryURLs(libs, cb) {
     var queries = libs.map(function(option) {
       return {
@@ -51,33 +40,6 @@
         done(null, libraryScriptURL);
       });
     }, cb);
-  }
-
-  function parseUserInput(input) {
-    // jquery, underscore@1.2.1, backbone ->
-    // [{
-    //   name: 'jquery',
-    //   version: null
-    // }, {
-    //   name: 'underscore',
-    //   version: '1.2.1'
-    // }, {
-    //   name: 'backbone',
-    //   version: null
-    // }]
-
-    return input.split(',')
-      .map(function(lib) {
-        var nameVer = lib.split('@');
-
-        return {
-          name:    nameVer[0].trim(),
-          version: nameVer[1] || null
-        };
-      })
-      .filter(function(obj) {
-        return obj.name.length > 0;
-      });
   }
 
   function get(url, data, cb) {
@@ -141,4 +103,8 @@
       });
     });
   }
+
+  return {
+    getCDNLibraryURLs: getCDNLibraryURLs
+  };
 })();
