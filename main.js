@@ -1,5 +1,3 @@
-// (function(api, ui, parse, inject) {
-
 var api = require('./api');
 var ui = require('./ui');
 var parse = require('./parse');

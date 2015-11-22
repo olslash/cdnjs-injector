@@ -1,4 +1,3 @@
-// todo: close button
 var CDNInjectorElement = document.createElement('div');
 
 CDNInjectorElement.className = 'cdn-injector-container';
