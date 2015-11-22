@@ -7,7 +7,8 @@ function getCDNLibraryURLs(libs, cb) {
   var queries = libs.map(function(option) {
     return {
       search: option.name,
-      fields: option.version ? 'assets' : null
+      fields: option.version ? 'assets' : null,
+      version: option.version
     };
   });
 
@@ -30,7 +31,7 @@ function getCDNLibraryURLs(libs, cb) {
         });
 
         if (!versionExists) {
-          return done('The version specified for ' + query.name + ' (' + query.version + ') does not exist.');
+          return done('The version specified for ' + query.search + ' (' + query.version + ') does not exist.');
         }
 
         libraryScriptURL = getVersionedCDNURL(results[0].name, query.version, extractFilename(results[0].latest));
