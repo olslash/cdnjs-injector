@@ -7,5 +7,9 @@
     "build": "rm -rf build && mkdir build && node_modules/.bin/browserify main.js -o build/bundle.js && node_modules/.bin/uglifyjs build/bundle.js --drop-console --dead_code -c -m -o build/bundle.min.js"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "browserify": "^12.0.1",
+    "uglifyjs": "^2.4.10"
+  }
 }
